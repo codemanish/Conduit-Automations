@@ -1,0 +1,29 @@
+{
+  "name": "conduit-automations",
+  "version": "1.0.0",
+  "description": "This is an Playwright + Typescript based Automation Framework to test Conduit Application present at this repo: github.com/cirosantilli/node-express-sequelize-realworld-example-app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:api": "playwright test --project=api",
+    "test:ui": "playwright test --project=ui",
+    "test:headed": "playwright test --project=ui --headed",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-second:codemanish/Conduit-Automations.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@faker-js/faker": "^10.6.0",
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.4.0",
+    "dotenv": "^17.4.2",
+    "typescript": "^7.0.2"
+  }
+}
