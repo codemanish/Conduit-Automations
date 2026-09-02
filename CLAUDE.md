@@ -37,8 +37,10 @@ behind these rules if you need it — this file is just the "how", not the "why"
 
 | Fixture | What it gives you |
 |---|---|
-| `auth` | `AuthClient` — register/login via the API |
-| `articles` | `ArticlesClient` — create/read articles, add/list comments |
+| `auth` | `AuthClient` — register/login/current-user/settings via the API |
+| `articles` | `ArticlesClient` — create/read/update/delete articles, favorite/unfavorite, add/list comments |
+| `profiles` | `ProfilesClient` — get profile, follow/unfollow |
+| `tags` | `TagsClient` — list tags |
 | `newUser` | A fresh, already-registered `{ username, email, password, token }`. Use this whenever a test just needs "some logged-in user". |
 | `page` | Plain Playwright page, logged out. Use for the login/register flow tests themselves. |
 | `authenticatedPage` | A browser page already logged in (JWT injected into `localStorage` before the app boots). Use for any UI test that needs auth but isn't testing login itself. |
