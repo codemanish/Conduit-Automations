@@ -49,3 +49,14 @@ test.describe('Auth API - negative cases', () => {
     expect(body.errors).toEqual({ 'email or password': 'is invalid' });
   });
 });
+
+test.describe('Auth API - settings', () => {
+  test('an authenticated user can update their bio and see it reflected in GET /user', async ({ auth, newUser }) => {
+    const newBio = 'QA engineer who writes typed API clients.';
+
+    await auth.updateSettings({ bio: newBio }, newUser.token);
+    const { user } = await auth.current(newUser.token);
+
+    expect(user.bio).toBe(newBio);
+  });
+});

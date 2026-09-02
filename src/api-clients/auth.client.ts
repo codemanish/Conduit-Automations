@@ -1,15 +1,14 @@
 import type { APIRequestContext } from '@playwright/test';
-import type { ErrorsResponse, NewUser, UserResponse } from '../types/api';
+import type { ErrorsResponse, NewUser, UpdateUserFields, UserResponse } from '../types/api';
+import { authHeader, expectOk } from './http';
 
-/** Thin wrapper over the /users endpoints. baseURL (http://localhost:3000/api) comes from playwright.config.ts. */
+/** Thin wrapper over the /users and /user endpoints. baseURL (http://localhost:3000/api) comes from playwright.config.ts. */
 export class AuthClient {
   constructor(private readonly request: APIRequestContext) {}
 
   async register(newUser: NewUser): Promise<UserResponse> {
     const response = await this.request.post('users', { data: { user: newUser } });
-    if (!response.ok()) {
-      throw new Error(`Register failed: ${response.status()} ${await response.text()}`);
-    }
+    await expectOk(response, 'Register');
     return response.json();
   }
 
@@ -17,9 +16,24 @@ export class AuthClient {
     const response = await this.request.post('users/login', {
       data: { user: { email, password } },
     });
-    if (!response.ok()) {
-      throw new Error(`Login failed: ${response.status()} ${await response.text()}`);
-    }
+    await expectOk(response, 'Login');
+    return response.json();
+  }
+
+  /** GET /user - the currently authenticated user, per the token passed in. */
+  async current(token: string): Promise<UserResponse> {
+    const response = await this.request.get('user', { headers: authHeader(token) });
+    await expectOk(response, 'Get current user');
+    return response.json();
+  }
+
+  /** PUT /user - partial update; only the fields you pass are changed. */
+  async updateSettings(fields: UpdateUserFields, token: string): Promise<UserResponse> {
+    const response = await this.request.put('user', {
+      headers: authHeader(token),
+      data: { user: fields },
+    });
+    await expectOk(response, 'Update settings');
     return response.json();
   }
 
@@ -42,9 +56,4 @@ export class AuthClient {
     });
     return { status: response.status(), body: await response.json() };
   }
-}
-
-/** The app accepts `Token <jwt>` (Bearer also works, but this matches the app's own frontend). */
-export function authHeader(token: string): { Authorization: string } {
-  return { Authorization: `Token ${token}` };
 }

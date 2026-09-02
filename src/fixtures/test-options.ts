@@ -1,6 +1,6 @@
 import { test as base, request as pwRequest } from '@playwright/test';
 import type { APIRequestContext, Page } from '@playwright/test';
-import { AuthClient, ArticlesClient } from '../api-clients';
+import { AuthClient, ArticlesClient, ProfilesClient, TagsClient } from '../api-clients';
 import { buildUser } from '../factories/user.factory';
 import { API_BASE_URL, UI_BASE_URL } from '../config/env';
 import type { NewUser } from '../types/api';
@@ -12,6 +12,8 @@ type Fixtures = {
   apiContext: APIRequestContext;
   auth: AuthClient;
   articles: ArticlesClient;
+  profiles: ProfilesClient;
+  tags: TagsClient;
   /** A fresh, unique, already-registered user. Use this when a test needs "some logged-in
    *  user" but isn't itself testing registration or login. */
   newUser: AuthedUser;
@@ -33,6 +35,14 @@ export const test = base.extend<Fixtures>({
 
   articles: async ({ apiContext }, use) => {
     await use(new ArticlesClient(apiContext));
+  },
+
+  profiles: async ({ apiContext }, use) => {
+    await use(new ProfilesClient(apiContext));
+  },
+
+  tags: async ({ apiContext }, use) => {
+    await use(new TagsClient(apiContext));
   },
 
   newUser: async ({ auth }, use) => {

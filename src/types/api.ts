@@ -79,3 +79,17 @@ export interface NewArticle {
   body: string;
   tagList?: string[];
 }
+
+/** PUT /user only changes fields you send - see routes/api/users.js's `typeof !== 'undefined'`
+ *  checks, which is why every field here is optional even though NewUser's aren't. */
+export interface UpdateUserFields {
+  username?: string;
+  email?: string;
+  password?: string;
+  bio?: string;
+  image?: string;
+}
+
+export interface TagsResponse {
+  tags: string[];
+}
